@@ -33,5 +33,5 @@ largest one (maximum number of iterations is 1000)
 5) A table is produced the values of CRE and TRI for all three samples
 6) A feedback file is also created with a summary of the main results
 7) Other datasets for potential further analyses are also created 
-(as described in the feedback file(
+(as described in the feedback file)
 """
