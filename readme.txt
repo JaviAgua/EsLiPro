@@ -24,7 +24,7 @@ All items located after the underscore sign are considered *suffixes*.
 
 The script runs the following operations:
 1) An estimation of creativity (CRE) is made for the two text files
-(e.g. "a" is used with four three different suffixes: x, y and earth)
+(e.g. "a" is used with three different suffixes: x, y and earth)
 2) An estimation of triteness (TRI) is made for the two text files
 (e.g. "y" has a value of 1 because it is only used with one prefix)
 3) Since two files are read, a series of random samples are extracted from the
