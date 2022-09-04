@@ -53,12 +53,12 @@ largest one (maximum number of iterations is 1000)
 # {01}  Count the number of tokens and types in one sample (Sample 1)
 # {01.a} Create a table with four columns Sample','Position','Morpheme','CRE' for preffixes
 # {01.b} Create a table with four columns Sample','Position','Morpheme','CRE' for suffixes
-# {01.c} Maje a first compute of overall productivity
+# {01.c} Make a first compute of overall productivity for the first file
 
 # {02} Count the number of tokens and types in a second file (Sample 2)
 # {02.a} Create a table with four columns Sample','Position','Morpheme','CRE' for preffixes
 # {02.b} Create a table with four columns Sample','Position','Morpheme','CRE' for suffixes
-# {02.c} Maje a first compute of overall productivity
+# {02.c} Make a first compute of overall productivity for the second file
 
 # {03} First control: check for the vocabulary of prefixes and suffixes across samples
 # {03.a} Filter cases from Sample 2 with the types existing in Sample 1
