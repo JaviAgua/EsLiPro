@@ -36,7 +36,7 @@ The script runs the following operations:
 3) Since two files are read, a series of random samples are extracted from the
 largest one (maximum number of iterations is 1000)
 4) A new compute of CRE and TRI is made for the series of random samples
-5) A table is produced the values of CRE and TRI for all three samples
+5) A table is produced with the values of CRE and TRI for all three samples
 6) A feedback file is also created with a summary of the main results
 7) Other datasets for potential further analyses are also created 
 (as described in the feedback file)
