@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed May 25 22:00:21 2022
+version 2, July 2023
 
 @author: javier aguado-orea
 
@@ -25,6 +26,8 @@ a_x
 
 All items located before the underscore sign are considered *prefixes*.
 All items located after the underscore sign are considered *suffixes*.
+Characters different than letters MUST be avoided, particularly the pipe sign "|", but also ":" and "-"
+#In this version (v2) all non-letters are replaced by the txt "xx"
 
 
 
@@ -167,6 +170,19 @@ data2.columns = ["prefix", "suffix"]
 data1["construction"] = data1[["prefix", "suffix"]].apply("_".join, axis=1)
 data2["construction"] = data2[["prefix", "suffix"]].apply("_".join, axis=1)
 
+#it is better to have only letters, so non-letters are replaced by "xx using RegEX
+#first, the _ character is kept 
+data1 = data1.replace('_', 'spltsplt', regex=True)
+data2 = data2.replace('_', 'spltsplt', regex=True)
+#then, all other non-letters are replaced by xx 
+data1 = data1.replace('[^0-9a-zA-Z]+', 'xx', regex=True)
+data2 = data2.replace('[^0-9a-zA-Z]+', 'xx', regex=True)
+#finally, all _ characters are taken back
+data1 = data1.replace('spltsplt', '_', regex=True)
+data2 = data2.replace('spltsplt', '_', regex=True)
+
+
+
 
 #the frequencies of prefix and suffix are computed now
 prefix_table1 = data1["prefix"].value_counts()
@@ -235,36 +251,36 @@ types_cons_2 = set(data2["construction"])
 # I create a new dataframe with four colums, the preffix and the number of types for Sample 1
 CRE_Pre_Table_1 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in types_pref_1:
+for itempre in types_pref_1:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch = str(item) + '_'
+    safesearchpre = str(itempre) + '_'
     # STILL IMPORTANT: the boundary marker \b has to be added at the beginning, otherwise, when searching for "he" it would also find "sHE"
-    searchitem=re.compile(r"\b"+safesearch)
-    CRE_Pre_1 = re.findall(searchitem, str(types_cons_1))
+    searchitempre=re.compile(r"\b"+safesearchpre)
+    CRE_Pre_1 = re.findall(searchitempre, str(types_cons_1))
     # it counts the number of types found (how creatively it was used)
     nCRE_Pre_1 = len(CRE_Pre_1)
     # it adds them to the dataframe, with the name of the type under "morpheme" and the creativity under "CRE"
-    CRE_Pre_Table_1.loc[len(CRE_Pre_Table_1)] = [1,'Prefix',item,nCRE_Pre_1]
+    CRE_Pre_Table_1.loc[len(CRE_Pre_Table_1)] = [1,'Prefix',itempre,nCRE_Pre_1]
 
 
 # {01.b} And now for suffixes
 CRE_Suf_Table_1 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in types_suff_1:
+for itemsuf in types_suff_1:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch =  '_' + str(item)
-    searchitem = re.compile(r'%s\b' % safesearch)
-    CRE_Suf_1 = re.findall(searchitem, str(types_cons_1))
+    safesearchsuf =  '_' + str(itemsuf)
+    searchitemsuf = re.compile(r'%s\b' % safesearchsuf) # \b matches word boundaries
+    CRE_Suf_1 = re.findall(searchitemsuf, str(types_cons_1))
     # it counts the number of types found (how creatively it was used)
     nCRE_Suf_1 = len(CRE_Suf_1)
     # it adds them to the dataframe, with the name of the type under "Morpheme" and the creativity under "CRE"
-    CRE_Suf_Table_1.loc[len(CRE_Suf_Table_1)] = [1,'Suffix',item,nCRE_Suf_1]
+    CRE_Suf_Table_1.loc[len(CRE_Suf_Table_1)] = [1,'Suffix',itemsuf,nCRE_Suf_1]
 
 # {01.c} And now an overall level of creativity is computed
 # Creativity for Prefixes
@@ -314,34 +330,34 @@ CRE_Suf_Table_1 = CRE_Suf_Table_1.sort_values(by=['Morpheme'])
 # I create a new dataframe with two colums, the preffix and the number of types for Sample 2
 CRE_Pre_Table_2 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 2 starts here
-for item in types_pref_2:
+for itempre2 in types_pref_2:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch = str(item) + '_'
-    searchitem=re.compile(r"\b"+safesearch)
-    CRE_Pre_2 = re.findall(searchitem, str(types_cons_2))
+    safesearchpre2 = str(itempre2) + '_'
+    searchitempre2=re.compile(r"\b"+safesearchpre2)
+    CRE_Pre_2 = re.findall(searchitempre2, str(types_cons_2))
     # it counts the number of types found (how creatively it was used)
     nCRE_Pre_2 = len(CRE_Pre_2)
     # it adds them to the dataframe, with the name of the type under "Morpheme" and the creativity under "CRE"
-    CRE_Pre_Table_2.loc[len(CRE_Pre_Table_2)] = [2,'Prefix',item,nCRE_Pre_2]
+    CRE_Pre_Table_2.loc[len(CRE_Pre_Table_2)] = [2,'Prefix',itempre2,nCRE_Pre_2]
 
 # {02.b} And now for suffixes
 CRE_Suf_Table_2 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in types_suff_2:
+for itemsuf2 in types_suff_2:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch =  '_' + str(item)
-    searchitem = re.compile(r'%s\b' % safesearch)
-    CRE_Suf_2 = re.findall(searchitem, str(types_cons_2))
+    safesearchsuf2 =  '_' + str(itemsuf2)
+    searchitemsuf2 = re.compile(r'%s\b' % safesearchsuf2)
+    CRE_Suf_2 = re.findall(searchitemsuf2, str(types_cons_2))
     # it counts the number of types found (how creatively it was used)
     nCRE_Suf_2 = len(CRE_Suf_2)
     # it adds them to the dataframe, with the name of the type under "Morpheme" and the creativity under "CRE"
-    CRE_Suf_Table_2.loc[len(CRE_Suf_Table_2)] = [2,'Suffix',item,nCRE_Suf_2]
+    CRE_Suf_Table_2.loc[len(CRE_Suf_Table_2)] = [2,'Suffix',itemsuf2,nCRE_Suf_2]
 
 # {02.c} And now an overall level of creativity is computed
 #Compute of the average level of creativity for prefixes
@@ -475,70 +491,70 @@ FILT_types_cons_2 = set(FILT_2["construction"])
 # I create a new dataframe with four colums, the preffix and the number of types for the filtered version of Sample 1
 CRE_Pre_FILT_1 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in FILT_types_pref_1:
+for itempreF1 in FILT_types_pref_1:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch = str(item) + '_'
-    searchitem=re.compile(r"\b"+safesearch)
-    FILT_CRE_Pre_1 = re.findall(searchitem, str(FILT_types_cons_1))
+    safesearchpreF1 = str(itempreF1) + '_'
+    searchitempreF1=re.compile(r"\b"+safesearchpreF1)
+    FILT_CRE_Pre_1 = re.findall(searchitempreF1, str(FILT_types_cons_1))
     # it counts the number of types found (how creatively it was used)
     FILT_nCRE_Pre_1 = len(FILT_CRE_Pre_1)
     # it adds them to the dataframe, with the name of the type under "morpheme" and the creativity under "CRE"
-    CRE_Pre_FILT_1.loc[len(CRE_Pre_FILT_1)] = [1,'Prefix',item,FILT_nCRE_Pre_1]
+    CRE_Pre_FILT_1.loc[len(CRE_Pre_FILT_1)] = [1,'Prefix',itempreF1,FILT_nCRE_Pre_1]
 
 
 
 # And now for suffixes
 CRE_Suf_FILT_1 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in FILT_types_suff_1:
+for itemasufF1 in FILT_types_suff_1:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch =  '_' + str(item)
-    searchitem = re.compile(r'%s\b' % safesearch)
-    FILT_CRE_Suf_1 = re.findall(searchitem, str(FILT_types_cons_1))
+    safesearchsufF1 =  '_' + str(itemasufF1)
+    searchitemsufF1 = re.compile(r'%s\b' % safesearchsufF1)
+    FILT_CRE_Suf_1 = re.findall(searchitemsufF1, str(FILT_types_cons_1))
     # it counts the number of types found (how creatively it was used)
     FILT_nCRE_Suf_1 = len(FILT_CRE_Suf_1)
     # it adds them to the dataframe, with the name of the type under "Morpheme" and the creativity under "CRE"
-    CRE_Suf_FILT_1.loc[len(CRE_Suf_FILT_1)] = [1,'Suffix',item,FILT_nCRE_Suf_1]
+    CRE_Suf_FILT_1.loc[len(CRE_Suf_FILT_1)] = [1,'Suffix',itemasufF1,FILT_nCRE_Suf_1]
 
 # {03.e} Create a new table with the new values of creativity for the filtered version of Sample 2
 # I create a new dataframe with four colums, the preffix and the number of types for the filtered version of Sample 2
 CRE_Pre_FILT_2 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in FILT_types_pref_2:
+for itempreF2 in FILT_types_pref_2:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch = str(item) + '_'
-    searchitem=re.compile(r"\b"+safesearch)
-    FILT_CRE_Pre_2 = re.findall(searchitem, str(FILT_types_cons_2))
+    safesearchpreF2 = str(itempreF2) + '_'
+    searchitempreF2=re.compile(r"\b"+safesearchpreF2)
+    FILT_CRE_Pre_2 = re.findall(safesearchpreF2, str(FILT_types_cons_2))
     # it counts the number of types found (how creatively it was used)
     FILT_nCRE_Pre_2 = len(FILT_CRE_Pre_2)
     # it adds them to the dataframe, with the name of the type under "morpheme" and the creativity under "CRE"
-    CRE_Pre_FILT_2.loc[len(CRE_Pre_FILT_2)] = [2,'Prefix',item,FILT_nCRE_Pre_2]
+    CRE_Pre_FILT_2.loc[len(CRE_Pre_FILT_2)] = [2,'Prefix',itempreF2,FILT_nCRE_Pre_2]
 
 
 # And now for suffixes
 CRE_Suf_FILT_2 = pd.DataFrame(columns=['Sample','Position','Morpheme','CRE'])
 # A new loop with the size of the numbner of preffix types in Sample 1 starts here
-for item in FILT_types_suff_2:
+for itemsufF2 in FILT_types_suff_2:
     # the most important line follows, using regular expressions
     # it finds all the items in the column "construction" (e.g. com-o and com-es include com-)
     # since it is in the loop, it goes item by item (e.g. verb by verb)
     # IMPORTANT: the _ marker has to be added to item, otherwise, when searching for "he" it would also find "sHE" and "tHEy"
-    safesearch =  '_' + str(item)
-    searchitem = re.compile(r'%s\b' % safesearch)
-    FILT_CRE_Suf_2 = re.findall(searchitem, str(FILT_types_cons_2))
+    safesearchsufF2 =  '_' + str(itemsufF2)
+    searchitemsufF2 = re.compile(r'%s\b' % safesearchsufF2)
+    FILT_CRE_Suf_2 = re.findall(searchitemsufF2, str(FILT_types_cons_2))
     # it counts the number of types found (how creatively it was used)
     FILT_nCRE_Suf_2 = len(FILT_CRE_Suf_2)
     # it adds them to the dataframe, with the name of the type under "Morpheme" and the creativity under "CRE"
-    CRE_Suf_FILT_2.loc[len(CRE_Suf_FILT_2)] = [2,'Suffix',item,FILT_nCRE_Suf_2]
+    CRE_Suf_FILT_2.loc[len(CRE_Suf_FILT_2)] = [2,'Suffix',itemsufF2,FILT_nCRE_Suf_2]
 
 
 # {03.f} Global computes of creativity after the first comntrol (vocabulary)
@@ -1085,4 +1101,3 @@ ResultsTable.to_csv('summary_table.csv')
 
 
 print('End of code reached.')
-
